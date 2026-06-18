@@ -1,0 +1,10 @@
+bin/
+obj/
+node_modules/
+dist/
+.env
+*.user
+*.suo
+*.tsbuildinfo
+backend/ReadingJournal.Api/uploads/*
+!backend/ReadingJournal.Api/uploads/.gitkeep
