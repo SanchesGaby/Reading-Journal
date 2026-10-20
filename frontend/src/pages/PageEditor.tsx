@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getApiErrorMessage } from '../services/api';
 import { createPage, getPage, updatePage } from '../services/pagesApi';
-import type { PagePayload, ReadingStatus } from '../types/page';
+import type { PageDetails, PagePayload, ReadingStatus } from '../types/page';
 import { statusOptions } from '../utils/status';
 
 const emptyForm: PagePayload = {
@@ -24,6 +24,25 @@ const emptyForm: PagePayload = {
   personalReview: '',
 };
 
+function toPagePayload(page: PageDetails): PagePayload {
+  return {
+    title: page.title,
+    author: page.author,
+    genre: page.genre ?? '',
+    publisher: page.publisher ?? '',
+    year: page.year ?? null,
+    isbn: page.isbn ?? '',
+    pageCount: page.pageCount ?? null,
+    startedAt: page.startedAt ?? null,
+    finishedAt: page.finishedAt ?? null,
+    status: page.status,
+    rating: Number(page.rating),
+    characters: page.characters ?? '',
+    summary: page.summary ?? '',
+    personalReview: page.personalReview ?? '',
+  };
+}
+
 export function PageEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -33,25 +52,9 @@ export function PageEditor() {
 
   useEffect(() => {
     if (!id) return;
+
     getPage(id)
-      .then((page) =>
-        setForm({
-          title: page.title,
-          author: page.author,
-          genre: page.genre ?? '',
-          publisher: page.publisher ?? '',
-          year: page.year ?? null,
-          isbn: page.isbn ?? '',
-          pageCount: page.pageCount ?? null,
-          startedAt: page.startedAt ?? null,
-          finishedAt: page.finishedAt ?? null,
-          status: page.status,
-          rating: Number(page.rating),
-          characters: page.characters ?? '',
-          summary: page.summary ?? '',
-          personalReview: page.personalReview ?? '',
-        }),
-      )
+      .then((page) => setForm(toPagePayload(page)))
       .catch(() => setError('Nao foi possivel carregar esta pagina.'));
   }, [id]);
 
