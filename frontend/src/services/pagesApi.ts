@@ -39,10 +39,6 @@ export async function addPageImageUrl(pageId: string, payload: ImageUrlPayload) 
   return data;
 }
 
-export async function getPageImages(pageId: string) {
-  const { data } = await api.get<PageImage[]>(`/pages/${pageId}/images`);
-  return data;
-}
 
 export async function createQuote(payload: QuotePayload) {
   const { data } = await api.post<Quote>('/quotes', payload);
